@@ -1,0 +1,2 @@
+# python train.py  --mode train  --train_epochs 30  --freeze_epochs 3  --train_batch_size 256  --val_batch_size 256  --loss 'ClassAsyDiff' --train_lr 0.0005 \
+#         --train_sch_step iter  --train_scheduler RP  --train_scheduler_mode valloss --backbone 'DenseNet121' --fp_gamma_neg 2.9 --tn_gamma_neg 3.0 --loss_weight 'log2'
