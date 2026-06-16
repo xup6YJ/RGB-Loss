@@ -833,6 +833,17 @@ class ClassAsyDiff(nn.Module):
         self.eps = 1e-4
         self.class_ratio = class_distribution(args).cuda()
 
+    def ExistTP(self, x, y):
+        x_i = x[y == 1]
+
+        sigmoid_i = torch.sigmoid(x_i)
+        tp_mask = (sigmoid_i >= 0.5)
+
+        if tp_mask.any():
+            return True
+        else:
+            return False
+
     def PosNeg(self, x, y, ratio=1):
         x_i = x[y == 1]
         x_j = x[y == 0]
@@ -922,12 +933,19 @@ class ClassAsyDiff(nn.Module):
             if len(disease_cols.shape) == 0:
                 disease_cols = disease_cols.unsqueeze(0)
             for col in disease_cols:
-                PosNegLoss += self.PosNeg(x[:, col], y[:, col], self.class_ratio[col])/y.shape[0]
-                Tnloss, Fploss = self.FpTp(x[:, col], y[:, col])
-                Tnloss /= y.shape[0]
-                Fploss /= y.shape[0]
-                FpTpLoss += Fploss
-                TnLoss += Tnloss
+                PosNegLoss += self.PosNeg(x[:, col], y[:, col])/y.shape[0]
+                if self.ExistTP(x[:, col], y[:, col]):
+                    Tnloss, Fploss = self.FpTp(x[:, col], y[:, col])
+                    Tnloss /= y.shape[0]
+                    Fploss /= y.shape[0]
+                    FpTpLoss += Fploss
+                    TnLoss += Tnloss
+                else:
+                    Tnloss, Fploss = self.FpTn(x[:, col])
+                    Tnloss /= y.shape[0]
+                    Fploss /= y.shape[0]
+                    FpTnLoss += Fploss
+                    TnLoss += Tnloss
         # Process no_disease columns
         nodisease_cols = nodisease.nonzero(as_tuple=False).squeeze()
         if nodisease_cols.numel() > 0:
