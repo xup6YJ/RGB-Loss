@@ -3,7 +3,7 @@
 Official implementation of "Reference-Guided Gradient Balancing Loss for Long-Tailed Multi-Label Medical Image Classification". 
 
 
-## Quick Implement
+## Quick Implementation
 ```bash
 bash main.sh
 ```
@@ -20,7 +20,14 @@ python test.py
 ```
 ## Citation
 ```bash
-
+@inproceedings{lin2026reference,
+  title={Reference-Guided Gradient Balancing Loss for Long-Tailed Multi-label Medical Image Classification},
+  author={Lin, Ying-Chih and Peng, Hsiao-Chu and Kuo, Po-Chih and Chen, Yong-Sheng},
+  booktitle={International Conference on Medical Image Computing and Computer-Assisted Intervention},
+  pages={565--575},
+  year={2026},
+  organization={Springer}
+}
 ```
 
 
